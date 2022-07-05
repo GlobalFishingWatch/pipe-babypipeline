@@ -31,6 +31,10 @@ parser.add_argument('--location',
                     help='Dataset location. Format: str.',
                     default='US',
                     required=False)
+parser.add_argument('--date_format',
+                    help='Dataset date format. Date Format: str.',
+                    default="%Y%m%d",
+                    required=False)
 
 
 def save_moment_gcs(options, ds_moment: str):
@@ -68,7 +72,7 @@ def initialize(argv):
     client = bq.Client(options.project)
 
 
-    ds_moment = f'{DATASET_PREFIX}{dt.datetime.now().strftime("%Y%m%d%H%M%S")}'
+    ds_moment = f'{DATASET_PREFIX}{dt.datetime.now().strftime(options.date_format)}'
     save_moment_gcs(options, ds_moment)
 
     complete_ds = [f'{ds_moment}_{dataset_suffix}' for dataset_suffix in options.dataset_suffixes.split(',')]

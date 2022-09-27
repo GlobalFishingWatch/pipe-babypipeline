@@ -14,19 +14,7 @@ import re
 import time
 
 
-DATASET_PREFIX='pipe_ais_test_'
-
 parser = argparse.ArgumentParser()
-parser.add_argument('--project',
-                    help='Project identification. Format: str.',
-                    required=True)
-parser.add_argument('--dataset_suffixes',
-                    help='Datasets suffixes separated by comma. Format: str.',
-                    required=True)
-parser.add_argument('--storepath',
-                    help='Google Cloud Storage path where to store the moment. Format: str.',
-                    default='gs://ais-gfw/baby_pipeline/dataset_moment.txt',
-                    required=False)
 parser.add_argument('--location',
                     help='Dataset location. Format: str.',
                     default='US',
@@ -35,6 +23,17 @@ parser.add_argument('--date_format',
                     help='Dataset date format. Date Format: str.',
                     default="%Y%m%d",
                     required=False)
+parser.add_argument('--dataset_prefix',
+                    help='Datasets prefix. Format: str.',
+                    default='pipe_ais_test_',
+                    required=False)
+required = parser.add_argument_group('Required named arguments')
+required.add_argument('--project',
+                    help='Project identification. Format: str.',
+                    required=True)
+required.add_argument('--dataset_suffixes',
+                    help='Datasets suffixes separated by comma. Format: str.',
+                    required=True)
 
 
 def save_moment_gcs(options, ds_moment: str):
@@ -61,8 +60,7 @@ def save_moment_gcs(options, ds_moment: str):
 def initialize(argv):
     """
     Initialize datasets where to store the baby_pipeline results
-    1. Stores the dataset_moment to GCS
-    2. Create the datasets in case they don't exists.
+    1. Create the datasets in case they don't exists.
     """
     options = parser.parse_args(argv)
 
@@ -72,8 +70,8 @@ def initialize(argv):
     client = bq.Client(options.project)
 
 
-    ds_moment = f'{DATASET_PREFIX}{dt.datetime.now().strftime(options.date_format)}'
-    save_moment_gcs(options, ds_moment)
+    ds_moment = f'{options.dataset_prefix}{dt.datetime.now().strftime(options.date_format)}'
+    # save_moment_gcs(options, ds_moment)
 
     complete_ds = [f'{ds_moment}_{dataset_suffix}' for dataset_suffix in options.dataset_suffixes.split(',')]
     logging.info(f'Datasets proposed {complete_ds}', )

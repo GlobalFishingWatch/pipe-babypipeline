@@ -34,5 +34,5 @@ Note that the first time you do this, docker will build the image for you.
 
 ## what it does?
 
-* `init_datasets`: Initialize datasets where to store the baby_pipeline results. Stores the dataset_moment to GCS and Creates the datasets in case they don't exists.
+* `init_datasets`: Initialize datasets where to store the baby_pipeline results. Creates the datasets in case they don't exists.
 

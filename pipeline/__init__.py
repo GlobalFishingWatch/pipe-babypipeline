@@ -2,7 +2,7 @@
 Tools for run the baby_pipeline.
 """
 
-__version__ = '1.0.0'
+__version__ = '1.0.1'
 __author__ = 'Matias Piano'
 __email__ = 'matias@globalfishingwatch.org'
 __source__ = 'https://github.com/GlobalFishingWatch/pipe-babypipeline'

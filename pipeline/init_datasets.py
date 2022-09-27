@@ -89,7 +89,7 @@ def initialize(argv):
            logging.info(f'Created dataset {options.project}.{ds.dataset_id}')
 
     ### ALL DONE
-    logging.info('All done, you can find the output file here: {0}'.format(options.storepath))
+    # logging.info('All done, you can find the output file here: {0}'.format(options.storepath))
     logging.info('Execution time {0} minutes'.format((time.time()-start_time)/60))
 
 if __name__ == '__main__':

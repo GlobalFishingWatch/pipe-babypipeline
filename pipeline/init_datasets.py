@@ -9,6 +9,7 @@ from google.cloud import storage as st
 
 import argparse
 import datetime as dt
+import json
 import logging
 import re
 import time
@@ -34,6 +35,12 @@ required.add_argument('--project',
 required.add_argument('--dataset_suffixes',
                     help='Datasets suffixes separated by comma. Format: str.',
                     required=True)
+optional = parser.add_argument_group('Optional named arguments')
+optional.add_argument('--labels',
+                    help='Labels for the dataset to audit costs.',
+                    default=None,
+                    type=json.loads,
+                    required=False)
 
 
 def save_moment_gcs(options, ds_moment: str):
@@ -85,6 +92,7 @@ def initialize(argv):
             #if not found, create it
            ds = bq.Dataset(f'{options.project}.{dataset_id}') # Full dataset obj to send to API
            ds.location = options.location
+           ds.labels = options.labels
            ds = client.create_dataset(ds, timeout=30) # Make an API request
            logging.info(f'Created dataset {options.project}.{ds.dataset_id}')
 

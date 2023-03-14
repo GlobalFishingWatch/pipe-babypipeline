@@ -5,6 +5,6 @@ from setuptools import setup
 
 setup(
     name="pipeline",
-    version=__import__("pipeline").__version__,
+    version='v1.1.0',
     packages=find_packages(exclude=["test*.*", "tests"]),
 )

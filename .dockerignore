@@ -20,7 +20,7 @@ coverage.xml
 .hypothesis
 
 docker-compose*.yaml
-Dockerfile
+Dockerfile*
 
 data/
 .env/

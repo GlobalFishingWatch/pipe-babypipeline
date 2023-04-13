@@ -6,7 +6,6 @@ Initialize datasets where to store the baby_pipeline results
 from google.api_core.exceptions import NotFound
 from google.cloud import bigquery as bq
 from google.cloud import storage as st
-from importlib.metadata import version
 
 import argparse
 import datetime as dt
@@ -15,6 +14,10 @@ import logging
 import re
 import time
 
+
+def get_pipe_ver():
+    with open('setup.py') as rf:
+        return re.search(r'version=\'(v[0-9.]*)\'', rf.read()).group(1)
 
 day_seconds = 1000*60*60*24
 parser = argparse.ArgumentParser()
@@ -99,8 +102,8 @@ def initialize(argv):
             #if not found, create it
            ds = bq.Dataset(f'{options.project}.{dataset_id}') # Full dataset obj to send to API
            ds.location = options.location
-           ds.default_table_expiration_ms(day_seconds * options.table_expiration_days) # Ten days of expiration for all tables inside the dataset.
-           ds.description(f'Datasets proposed {complete_ds}. Baby_pipeline version: {version("pipeline")}')
+           ds.default_table_expiration_ms= day_seconds * options.table_expiration_days # Ten days of expiration for all tables inside the dataset.
+           ds.description = f'Created by pipe-babypipeline:{get_pipe_ver()}.'
            ds.labels = options.labels
            ds = client.create_dataset(ds, timeout=30) # Make an API request
            logging.info(f'Created dataset {options.project}.{ds.dataset_id}')

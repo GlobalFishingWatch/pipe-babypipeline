@@ -15,6 +15,11 @@ import re
 import time
 
 
+def get_pipe_ver():
+    with open('setup.py') as rf:
+        return re.search(r'version=\'(v[0-9.]*)\'', rf.read()).group(1)
+
+day_seconds = 1000*60*60*24
 parser = argparse.ArgumentParser()
 parser.add_argument('--location',
                     help='Dataset location. Format: str.',
@@ -40,6 +45,11 @@ optional.add_argument('--labels',
                     help='Labels for the dataset to audit costs.',
                     default=None,
                     type=json.loads,
+                    required=False)
+optional.add_argument('--table_expiration_days',
+                      help='The amount of days the tables inside the dataset has before expire. Format: int.',
+                    default=10,
+                    type=int,
                     required=False)
 
 
@@ -92,6 +102,8 @@ def initialize(argv):
             #if not found, create it
            ds = bq.Dataset(f'{options.project}.{dataset_id}') # Full dataset obj to send to API
            ds.location = options.location
+           ds.default_table_expiration_ms= day_seconds * options.table_expiration_days # Ten days of expiration for all tables inside the dataset.
+           ds.description = f'Created by pipe-babypipeline:{get_pipe_ver()}.'
            ds.labels = options.labels
            ds = client.create_dataset(ds, timeout=30) # Make an API request
            logging.info(f'Created dataset {options.project}.{ds.dataset_id}')

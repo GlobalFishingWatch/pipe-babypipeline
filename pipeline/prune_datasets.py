@@ -1,7 +1,7 @@
 """
 Initialize datasets where to store the baby_pipeline results
 1. Filter the datsets using labels, particularly the step:init_datasets (only created by baby_pipeline)
-2. Remove the datsets but keep the last two dates.
+2. Remove the datsets but keep the last two dates or cutomize the amount of newest to keep.
 """
 from google.cloud import bigquery as bq
 
@@ -15,7 +15,11 @@ parser.add_argument('--dataset_prefix',
                     help='Pattern in babypipeline datasets which has the date on it. Date Format: str.',
                     default="pipe_ais_test_YYYYMMDD",
                     required=False)
-required = parser.add_argument_group('Required named arguments')
+parser.add_argument('--keep_newest_datasets',
+                    help='Amount of newest datasets to keep. Date Format: int.',
+                    default=2,
+                    type=int,
+                    required=False)
 
 def get_pipe_ver():
     with open('setup.py') as rf:
@@ -32,6 +36,7 @@ def prune_datasets(argv):
     logging.info('Running prune baby pipeline datasets with args %s', options)
     client = bq.Client()
     PATTERN_LEN = len(options.dataset_prefix)
+    keep_newest_datasets = options.keep_newest_datasets
 
     get_datasets = client.list_datasets(filter='labels.step:init_datasets') # Make an API request.
     if not get_datasets:
@@ -41,7 +46,7 @@ def prune_datasets(argv):
 
     dataset_pattern_uniques = list(set(map(lambda x:x[:PATTERN_LEN], datasets)))
     dataset_pattern_uniques.sort()
-    pattern_to_remove = dataset_pattern_uniques[:-2]
+    pattern_to_remove = dataset_pattern_uniques[:-keep_newest_datasets]
 
     datasets_to_remove = list(filter(lambda x: x[:PATTERN_LEN] in pattern_to_remove, datasets))
     for dataset_id in datasets_to_remove:

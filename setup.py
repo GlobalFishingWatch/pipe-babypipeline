@@ -5,6 +5,6 @@ from setuptools import setup
 
 setup(
     name="pipe-babypipeline",
-    version='v1.2.0',
+    version='v1.3.0',
     packages=find_packages(exclude=["test*.*", "tests"]),
 )

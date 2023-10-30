@@ -3,11 +3,13 @@ import sys
 import logging
 
 from pipeline.init_datasets import initialize as run_init_datasets
+from pipeline.prune_datasets import prune_datasets as run_prune_datasets
 
 logging.basicConfig(level=logging.INFO)
 
 SUBCOMMANDS = {
     "init_datasets": run_init_datasets,
+    "prune_datasets": run_prune_datasets,
 }
 
 if __name__ == "__main__":

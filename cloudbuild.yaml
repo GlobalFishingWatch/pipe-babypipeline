@@ -18,19 +18,9 @@ steps:
     '${_SCHEDULER_IMAGE_NAME}:latest',
   ]
 
-- name: 'gcr.io/cloud-builders/docker'
-  id: push-scheduler-tag
-  args: [
-    'push',
-    '${_SCHEDULER_IMAGE_NAME}:${TAG_NAME}'
-  ]
-
-- name: 'gcr.io/cloud-builders/docker'
-  id: push-scheduler-latest
-  args: [
-    'push',
-    '${_SCHEDULER_IMAGE_NAME}:latest'
-  ]
+images:
+  - '${_SCHEDULER_IMAGE_NAME}:${TAG_NAME}'
+  - '${_SCHEDULER_IMAGE_NAME}:latest'
 
 timeout: 600s
 substitutions:

@@ -24,7 +24,7 @@ images:
 
 timeout: 600s
 substitutions:
-  _BASE_IMAGE_NAME: 'gcr.io/${PROJECT_ID}/pipe-babypipeline'
+  _BASE_IMAGE_NAME: 'gcr.io/${PROJECT_ID}/github.com/globalfishingwatch/pipe-babypipeline'
   _SCHEDULER_IMAGE_NAME: '${_BASE_IMAGE_NAME}/scheduler'
 options:
   dynamic_substitutions: true
